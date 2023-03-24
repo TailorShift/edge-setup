@@ -1,13 +1,17 @@
 #!/bin/bash
 
-echo "Creating services dir..."
-mkdir -p ~/.config/systemd/user/
+echo "Starting device setup"
 
-echo "Creating edge-proxy.service..."
-mv ./edge-proxy.service ~/.config/systemd/user/edge-proxy.service
+export KEYSTORE_FILE=/etc/tailorshift/keystore/keystore.jks
+export REGISTRATION_SERVICE=https://registration-service-atos-development.apps.wa6eqszp.uksouth.aroapp.io/registration/devices
+export POSMANAGER_URL=https://pos-manager-atos-development.apps.wa6eqszp.uksouth.aroapp.io/
+export DEVICE_ID=shop1-dev1 # $(cat /sys/devices/virtual/dmi/id/product_uuid)
 
-systemctl --user daemon-reload
+chmod +x ./register-device.sh
+chmod +x ./run-service.sh
 
-echo "Starting edge-proxy.service"
-systemctl --user start edge-proxy.service
-systemctl --user status edge-proxy.service
+echo "Loading keystore..."
+/bin/bash ./register-device.sh
+
+echo "Start edge-proxy.service"
+/bin/bash ./run-service.sh

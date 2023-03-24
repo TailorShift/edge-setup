@@ -20,6 +20,9 @@ ExecStart=/usr/bin/podman run \
         --rm \
         --sdnotify=conmon \
         --replace \
+        -e DEVICE_SERIAL="$DEVICE_ID"
+        -e POSMANAGER_URL="$POSMANAGER_URL"
+        -e KEYSTORE_PATH="$KEYSTORE_PATH"
         --name edge-proxy \
         -d \
         -p 8080:8080 quay.io/tailorshift/edge-proxy:latest
