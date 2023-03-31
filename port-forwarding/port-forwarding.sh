@@ -8,7 +8,7 @@
 if [ "${1}" = "edge" ]; then
 
    # Update the following variables to fit your setup
-   GUEST_IP=192.168.122.102
+   GUEST_IP=192.168.122.220
 
    # UI Ports
    GUEST_PORT_1=8080

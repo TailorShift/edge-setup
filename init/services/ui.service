@@ -23,7 +23,7 @@ ExecStart=/usr/bin/podman run \
         --replace \
         --name ui \
         -d \
-        -p 8081:8080 quay.io/tailorshift/tailorshift-ui:latest
+        -p 8080:8080 quay.io/tailorshift/tailorshift-ui:latest
 ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
 ExecStopPost=/usr/bin/podman rm -f --ignore --cidfile=%t/%n.ctr-id
 Type=notify

@@ -4,10 +4,10 @@ echo "Creating services dir..."
 mkdir -p ~/.config/systemd/user/
 
 echo "Creating edge-proxy.service..."
-cp .services/edge-proxy.service ~/.config/systemd/user/edge-proxy.service
+cp ./services/edge-proxy.service ~/.config/systemd/user/edge-proxy.service
 
 echo "Creating ui.service..."
-cp ./services/edge-proxy.service ~/.config/systemd/user/ui.service
+cp ./services/ui.service ~/.config/systemd/user/ui.service
 
 systemctl --user daemon-reload
 
