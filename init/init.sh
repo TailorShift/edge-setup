@@ -16,8 +16,8 @@ POSMANAGER_URL=$POSMANAGER_URL" > /home/admin/setup/edge-proxy.conf
 chmod +x ./register-device.sh
 chmod +x ./run-service.sh
 
-echo "Loading keystore..."
+echo "Registering device..."
 /bin/bash ./register-device.sh
 
-echo "Start edge-proxy.service"
+echo "Start services..."
 /bin/bash ./run-service.sh
