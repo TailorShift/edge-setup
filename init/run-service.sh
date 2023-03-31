@@ -13,4 +13,6 @@ systemctl --user daemon-reload
 
 echo "Starting edge-proxy.service"
 systemctl --user start edge-proxy.service
+
+echo "Starting ui.service"
 systemctl --user start ui.service

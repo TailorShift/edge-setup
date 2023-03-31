@@ -21,9 +21,6 @@ ExecStart=/usr/bin/podman run \
         --rm \
         --sdnotify=conmon \
         --replace \
-        -e DEVICE_SERIAL="$DEVICE_ID"
-        -e POSMANAGER_URL="$POSMANAGER_URL"
-        -e KEYSTORE_PATH="$KEYSTORE_PATH"
         --name ui \
         -d \
         -p 8081:8080 quay.io/tailorshift/tailorshift-ui:latest
