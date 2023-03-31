@@ -9,15 +9,31 @@ if [ "${1}" = "edge" ]; then
 
    # Update the following variables to fit your setup
    GUEST_IP=192.168.122.102
-   GUEST_PORT=8080
-   HOST_PORT=8080
 
-   if [ "${2}" = "stopped" ] || [ "${2}" = "reconnect" ]; then
-    /sbin/iptables -D FORWARD -o virbr0 -p tcp -d $GUEST_IP --dport $GUEST_PORT -j ACCEPT
-    /sbin/iptables -t nat -D PREROUTING -p tcp --dport $HOST_PORT -j DNAT --to $GUEST_IP:$GUEST_PORT
+   # UI Ports
+   GUEST_PORT_1=8080
+   HOST_PORT_1=8080
+
+   # Backend (edge proxy) ports
+   GUEST_PORT_2=9090
+   HOST_PORT_2=9090
+
+   if [ "${2}" = "stopped" ] || [ "${2}" = "reconnect" ]; 
+    # UI
+    /sbin/iptables -D FORWARD -o virbr0 -p tcp -d $GUEST_IP --dport $GUEST_PORT_1 -j ACCEPT
+    /sbin/iptables -t nat -D PREROUTING -p tcp --dport $HOST_PORT_1 -j DNAT --to $GUEST_IP:$GUEST_PORT_1
+
+    # Backend
+    /sbin/iptables -D FORWARD -o virbr0 -p tcp -d $GUEST_IP --dport $GUEST_PORT_2 -j ACCEPT
+    /sbin/iptables -t nat -D PREROUTING -p tcp --dport $HOST_PORT_2 -j DNAT --to $GUEST_IP:$GUEST_PORT_2
    fi
    if [ "${2}" = "start" ] || [ "${2}" = "reconnect" ]; then
-    /sbin/iptables -I FORWARD -o virbr0 -p tcp -d $GUEST_IP --dport $GUEST_PORT -j ACCEPT
-    /sbin/iptables -t nat -I PREROUTING -p tcp --dport $HOST_PORT -j DNAT --to $GUEST_IP:$GUEST_PORT
+    # UI
+    /sbin/iptables -I FORWARD -o virbr0 -p tcp -d $GUEST_IP --dport $GUEST_PORT_1 -j ACCEPT
+    /sbin/iptables -t nat -I PREROUTING -p tcp --dport $HOST_PORT_1 -j DNAT --to $GUEST_IP:$GUEST_PORT_1
+
+    # Backend
+    /sbin/iptables -I FORWARD -o virbr0 -p tcp -d $GUEST_IP --dport $GUEST_PORT_2 -j ACCEPT
+    /sbin/iptables -t nat -I PREROUTING -p tcp --dport $HOST_PORT_2 -j DNAT --to $GUEST_IP:$GUEST_PORT_2
    fi
 fi

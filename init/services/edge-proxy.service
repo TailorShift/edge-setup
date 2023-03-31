@@ -13,19 +13,23 @@ RequiresMountsFor=%t/containers
 Environment=PODMAN_SYSTEMD_UNIT=%n
 Restart=on-failure
 TimeoutStopSec=70
-ExecStartPre=/bin/rm -f %t/%n.ctr-id && /usr/bin/podman pull quay.io/tailorshift/edge-proxy:latest
+ExecStartPre=/bin/rm -f %t/%n.ctr-id
+EnvironmentFile=/home/admin/setup/edge-proxy.conf
+ExecStartPre=/usr/bin/podman pull quay.io/tailorshift/edge-proxy:latest
 ExecStart=/usr/bin/podman run \
         --cidfile=%t/%n.ctr-id \
         --cgroups=no-conmon \
         --rm \
         --sdnotify=conmon \
         --replace \
-        -e DEVICE_SERIAL="$DEVICE_ID"
-        -e POSMANAGER_URL="$POSMANAGER_URL"
-        -e KEYSTORE_PATH="$KEYSTORE_PATH"
         --name edge-proxy \
+        -e QUARKUS_HTTP_CORS_ORIGINS=http://20.254.120.86:8080 \
+        -e DEVICE_SERIAL=${DEVICE_ID} \
+        -e POSMANAGER_URL=${POSMANAGER_URL} \
+        -e KEYSTORE_PATH=/opt/keystore/keystore.jks \
+        -v ${KEYSTORE_FILE}:/opt/keystore/keystore.jks:Z \
         -d \
-        -p 8080:8080 quay.io/tailorshift/edge-proxy:latest
+        -p 9090:8080 quay.io/tailorshift/edge-proxy:latest
 ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
 ExecStopPost=/usr/bin/podman rm -f --ignore --cidfile=%t/%n.ctr-id
 Type=notify
